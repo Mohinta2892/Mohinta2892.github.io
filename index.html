@@ -266,14 +266,26 @@
   </tbody></table>
   <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
   <script>
+    function shouldOpenInNewTab(url) {
+      return url && !url.startsWith("#") && !url.startsWith("mailto:");
+    }
+
+    document.querySelectorAll("a[href]").forEach(function (link) {
+      var href = link.getAttribute("href");
+      if (shouldOpenInNewTab(href)) {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
+    });
+
     document.querySelectorAll(".clickable-row").forEach(function (row) {
       row.addEventListener("click", function (event) {
         if (event.target.closest("a")) return;
-        window.location.href = row.dataset.href;
+        window.open(row.dataset.href, "_blank", "noopener");
       });
       row.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
-          window.location.href = row.dataset.href;
+          window.open(row.dataset.href, "_blank", "noopener");
         }
       });
     });
